@@ -1,0 +1,16 @@
+version: '3'
+
+vars:
+  VERSION:
+    sh: awk -F '"' '/const Version/ {print $2}' internal/constants/constants.go
+
+tasks:
+  build:
+    desc: Build the server for AMD64 linux.
+    cmds:
+      - cmd: GOOS=linux GOARCH=amd64 go build -v -trimpath -ldflags="-s -w" -o bin/apikit .
+  
+  default:
+    desc: Default task with a fallback to the build task.
+    cmds:
+      - task: build

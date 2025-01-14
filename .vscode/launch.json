@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug [apikit run]",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": ["run"]
+        },
+        {
+            "name": "Debug [apikit version]",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": ["version"]
+        }
+    ]
+}
