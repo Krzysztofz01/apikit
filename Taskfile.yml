@@ -1,5 +1,7 @@
 version: '3'
 
+dotenv: [ 'Taskfile.yml.env' ]
+
 vars:
   VERSION:
     sh: awk -F '"' '/const Version/ {print $2}' internal/constants/constants.go
@@ -8,8 +10,17 @@ tasks:
   build:
     desc: Build the server for AMD64 linux.
     cmds:
+      - cmd: go mod download
       - cmd: GOOS=linux GOARCH=amd64 go build -v -trimpath -ldflags="-s -w" -o bin/apikit .
-  
+
+  build:image:
+    prompt: Are you sure you want to build and push the image to registry. Make sure you have setup the Taskfile.yml.env!
+    desc: Build the server "Docker" image.
+    cmds:
+      - cmd: $CONTAINER_TOOL build --tag $(echo "$IMAGE_REGISTRY_URL/$IMAGE_NAME:{{.VERSION}}") --no-cache .
+      - cmd: $CONTAINER_TOOL login --username=$IMAGE_REGISTRY_LOGIN --password=$IMAGE_REGISTRY_PASSWORD --tls-verify=$IMAGE_REGISTRY_TLS $IMAGE_REGISTRY_URL
+      - cmd: $CONTAINER_TOOL push --tls-verify=$IMAGE_REGISTRY_TLS $(echo "$IMAGE_REGISTRY_URL/$IMAGE_NAME:{{.VERSION}}")
+
   default:
     desc: Default task with a fallback to the build task.
     cmds:

@@ -32,3 +32,6 @@ bin/
 
 # config files
 config.json
+
+# taskfile env files
+Taskfile.yml.env
